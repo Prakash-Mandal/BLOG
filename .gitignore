@@ -1,0 +1,8 @@
+src/config
+vendor
+composer.json
+composer.lock
+Documentation.md
+MySQL Syntax Guideline Document.md
+readme.md
+sonar-project.properties

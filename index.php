@@ -1,8 +1,10 @@
 <?php
 
-require_once '../src/init.php';
+require_once 'core/init.php';
 
 use core\Blog;
+
+echo '<pre>';
 
 $blog = new Blog();
 

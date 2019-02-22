@@ -1,0 +1,10 @@
+{
+  "Data": {
+    "Database" : [
+      {"host" : "localhost"},
+      {"username" : "root"},
+      {"password" : "mindfire"},
+      {"database" : "Assignments"}
+    ]
+  }
+}
