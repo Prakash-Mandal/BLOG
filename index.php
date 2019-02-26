@@ -10,9 +10,7 @@
     </head>
     <body>
 
-        <span>Always Index</span>
         <div class="container-fluid">
-<!--            <pre>-->
             <?php
             require_once 'core/init.php';
 
@@ -26,18 +24,11 @@
 
             $blog->config();
 
-//            $blog->Database();
-
             $blog->call();
 
             ?>
         </div>
 
     </body>
-    <script>
-        $(document).ready(function(){
-            $(".toast").toast('show');
-        });
-    </script>
 </html>
 

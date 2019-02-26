@@ -33,15 +33,15 @@ class Signup extends Controller
 
     private function addData()
     {
-        echo "Data Added";
-//        die();
         $this->model('User');
         if ($this->model->addUser()) {
-
+            $data = "User Added Succesfully <br> Login to Continue";
+            $this->view('template/HeaderView', $data);
+            $this->view('SignUpView');
+            $this->view('template/FooterView');
         } else {
             $data =['Cannot Add the User'];
             $this->view('template/HeaderView', $data);
-//            $this->view('template/Modal', $data);
             $this->view('SignUpView');
             $this->view('template/FooterView');
         }
