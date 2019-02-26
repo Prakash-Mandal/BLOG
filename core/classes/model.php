@@ -1,17 +1,27 @@
 <?php
 
-abstract class Model {
+namespace models;
 
+use config\Database;
+
+/**
+ * 
+ */
+class Model
+{
     protected $db;
 
-    function __construct () {
+	function __construct()
+	{
+		# code...
 
-        global $app;
+        $this->db = new Database();
 
-        $this->db = $app->db;
-        
+	}
+
+    public function __toString()
+    {
+	    // TODO: Implement __toString() method.
+        return "Model is called";
     }
-
 }
-
-?>

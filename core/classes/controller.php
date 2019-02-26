@@ -1,5 +1,7 @@
 <?php
 
+namespace controller;
+
 abstract class Controller {
 
     private $route = [];
@@ -8,7 +10,15 @@ abstract class Controller {
 
     private $params = [];
 
-    function __construct () {
+    protected $model;
+
+    protected $view;
+
+    protected $db;
+
+    function __construct ($db) {
+
+        $this->db = $db;
 
         $this->route = explode('/', URI);
 
@@ -20,7 +30,7 @@ abstract class Controller {
 
     private function router () {
 
-        if (class_exists($this->route[1])) {
+        if (class_exists('controller\\' . $this->route[1])) {
 
             if ($this->args >= 3) {
                 if (method_exists($this, $this->route[2])) {
@@ -33,6 +43,7 @@ abstract class Controller {
             }
 
         } else {
+            echo "method : " . $this->route[1];
 
             if ($this->args >= 2) {
                 if (method_exists($this, $this->route[1])) {
@@ -56,8 +67,10 @@ abstract class Controller {
 
         if ($method == 0)
             call_user_func_array(array($this, 'Index'), $this->params);
-        else
+        else {
             call_user_func_array(array($this, $this->route[$method]), $this->params);
+
+        }
 
     }
 
@@ -65,16 +78,19 @@ abstract class Controller {
 
     function model ($path) {
 
-//        $path = $path;
 
         $class = explode('/', $path);
         $class = $class[count($class)-1];
+//        $path = strtolower($path);
 
-        $path = strtolower($path);
-
-        require(ROOT . '/app/models/' . $path . '.php');
-
-        $this->$class = new $class;
+        if(file_exists(ROOT . 'app/models/' . $path . '.php')) {
+            $class = '\models\\' . $class;
+            require(ROOT . 'app/models/' . $path . '.php');
+            $this->model = new $class();
+        } else {
+            echo "No such Model";
+            return null;
+        }
 
     }
 
@@ -83,10 +99,10 @@ abstract class Controller {
         if (is_array($data))
             extract($data);
 
-        require(ROOT . '/app/views/' . $path . '.php');
+//        var_dump($data);
+
+        require(ROOT . 'app/views/' . $path . '.html');
 
     }
 
 }
-
-?>

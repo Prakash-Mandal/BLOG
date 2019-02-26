@@ -1,0 +1,32 @@
+    <div class="container-fluid mt-md-2">
+        <div class="Header jumbotron row" >
+            <div class="col-sm-7 text-center" >
+              <h1>My Blog Page</h1>
+              <p>Write out you life!!</p>
+            </div>
+            <div class="jumbotron-fluid col-sm-5 row" >
+                <?php if (isset($_SESSION["name"]))  { ?>
+                    <form class="form-inline" action="/login/logout" method="post">
+                        <h4> Hello <?= $_SESSION["name"] ?> </h4>
+                        <button class="btn text-warning ml-md-3"
+                        type="submit" name="logout" value="true" >
+                            Logout
+                        </button>
+                    </form>
+                <?php } else { ?>
+                    <form name="LoginForm" class="form-group" action="/login/validating"
+                          method="POST" onsubmit="return validateLogin(this)" novalidate>
+                        <div class="form-inline">
+                            <input type="email" class="form-control mb-2
+                                mr-sm-2" id="u_email" name="u_email"
+                                autocomplete="username" placeholder="Enter Email" required>
+                            <input type="password" class="form-control mb-2 mr-sm-2" id="login_pass"
+                                name="pass" autocomplete="current-password" placeholder="Enter Password" required>
+                            <button type="submit" class="btn btn-primary mb-2"> Login </button>
+                        </div>
+                    </form>
+                <?php } ?>
+            </div>
+        </div>
+    </div>
+

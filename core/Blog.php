@@ -9,26 +9,39 @@
 namespace core;
 
 use config\Database;
+use Main;
+use models;
 
+/**
+ * Class Blog
+ * @package core
+ */
 class Blog
 {
-    protected $controller = 'Controller';
+    protected $controller;
 
-    protected $method = 'index';
-
-    protected $params = [];
-
+    /**
+     * @var null
+     */
     protected $db = null;
 
+    /**
+     * @var array
+     */
+    private $config = [];
+
+    /**
+     * Blog constructor.
+     */
     public function __construct()
     {
         define("URI", $_SERVER['REQUEST_URI']);
         define("ROOT", $_SERVER['DOCUMENT_ROOT']);
-        $this->call();
-//        $this->run();
-
     }
 
+    /**
+     *
+     */
     function autoload () {
 
         spl_autoload_register(function ($class) {
@@ -48,74 +61,72 @@ class Blog
 
     }
 
-    function require($path) {
+    /**
+     * @param $path
+     */
+    function requireFile($path) {
 
-        require ROOT . $path;
+        require_once ROOT . $path;
 
     }
 
+    /**
+     *
+     */
     function config()
     {
-        $this->require('/core/config/Database.php');
-        try {
-            $this->db = new Database();
-            $this->db->querySQL('SET NAMES utf8',[]);
-            $this->db->querySQL('SET CHARACTER_SET utf8_unicode_ci',[]);
-            $this->db->startConnection();
-        } catch (\PDOException $pdoe) {
-            echo 'Error : ' . $pdoe->getMessage();
-        }
+        $this->requireFile('core/config/session.php');
+
+        $this->db = new Database();
+        $this->db->startConnection();
+
+    }
+    function addJS()
+    {
+        echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+        <script src="./public/Javascript/blog.js"></script>
+        <noscript>Script not running</noscript>';
     }
 
+    /**
+     *
+     */
     public function call()
     {
-        $url = $this->parseURL();
-        echo "Url : ";
-        var_dump($url);
-        echo '<br>';
 
-        if (isset($url[0])) {
-            if (file_exists('../src/Controller/' . $url[0] . '.php')) {
-                echo $this->controller;
-                $this->controller = $url[0];
-                unset($url[0]);
-            }
+        session_name($this->config['sessionName']);
+        session_start();
+
+        $route = explode('/', URI);
+
+        if (file_exists(ROOT . 'app/controllers/' . $route[1] . '.php')) {
+            $this->requireFile('app/controllers/' . $route[1] . '.php');
+            $this->controller = '\controller\\' . ucfirst($route[1]);
+            $this->controller = new $this->controller($this->db);
+//            echo $this->controller;
+        } else {
+            $this->requireFile('app/controllers/main.php');
+            $this->controller = new \controller\Main($this->db);
         }
-
-        include_once ROOT.'/app/Controller/' . $this->controller . '.php';
-        $controller = 'controller\\' . $this->controller;
-        $this->controller = new $controller;
-
-        if (isset($url[1])) {
-            echo $url[1];
-            if (method_exists($this->controller, $url[1])) {
-                echo $url[1];
-                $this->method = $url[1];
-                unset($url[1]);
-            }
-        }
-
-        $this->params = $url ? array_values($url) : [];
-        var_dump($this->params);
-        echo 'END';
-
-        call_user_func_array([$this->controller, $this->method], [$this->parseURL()]);
 
     }
 
-    public function run()
+    public function Database()
     {
-        echo $_SERVER['REQUEST_URI'];
-        var_dump($this->parseURL());
-        $data = new Database();
-        $query = "select * from Blog_User";
-        $params = [];
+        $query = 'Select * from Blog_User where `Email_Id` = :value0';
+        $param = [":value0" => "Pmandal4444@gmail.com"];
 
-        $stmt = $data->querySQL($query, $params);
+        $result = $this->db->querySQL($query, $param);
 
-        call_user_func_array([$this->controller,$this->method], [$this->params]);
+        var_dump($result);
+
     }
 
+    /**
+     * @return array
+     */
     public function parseURL()
     {
         $str = $_SERVER['REQUEST_URI'];
@@ -129,9 +140,15 @@ class Blog
         } else {
             return [];
         }
-
     }
 
-
+    /**
+     * @return mixed
+     */
+    public function __toString()
+    {
+        // TODO: Implement __toString() method.
+        return $this->controller->__toString();
+    }
 
 }

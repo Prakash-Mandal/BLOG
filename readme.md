@@ -63,6 +63,57 @@ git clone https://Prakash-Mandal@bitbucket.org/Prakash-Mandal/blog.git
 
 ```
 
+# Running
+
+* Create a virtual host configuration file with **.conf** extension.  
+Example: **blog.dev.conf**
+```
+sudo nano /etc/apache2/sites-available/[virtual_host_file_name]
+```
+* Add the following configuration:
+```
+<VirtualHost *:80>
+    ServerAdmin [admin@domain]
+    ServerName [domain_name]
+    ServerAlias [domain_name]
+    DocumentRoot [path_to_project's_public_directory]
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+    RewriteEngine on
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(Images)(.*)$ /index.php?q=$1 [L,QSA]
+
+    <Directory [path_to_project's_public_directory]>
+        Options FollowSymLinks MultiViews
+                AllowOverride All
+                Order allow,deny
+                allow from all
+        </Directory>
+</VirtualHost>
+```
+**Please replace the placeholders with appropriate values.**
+
+* Run the following command to Enable the virtual host
+```
+sudo a2ensite [virtual_host_file_name]
+```
+* Restart Apache
+```
+sudo service apache2 reload
+```
+* Open Local Hosts file
+```
+sudo nano /etc/hosts
+```
+* Add the following to the Local Hosts file
+```
+127.0.0.1   [domain_name]
+```
+* Now open a browser, visit your domain and you should see the home page.
+
+
 ##Blog Project
 
 ##Added APIs to checkEMail

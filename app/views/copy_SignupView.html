@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>SignUp</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link type="text/css" href="../includes/blog.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="jumbotron row" style="text-align: left;">
+        <div class="jumbotron col-sm-6">
+            <img class="img-thumbnail" src="../Images/Entrepreneur-Blogs.jpg">
+        </div>
+        <div class="jumbotron col-sm-6 row" >
+            <form method="POST" id="SignupForm" class="form-group" onsubmit="return validateSignup()">
+
+                <div class="form-group form-control col-sm-7">
+                    <input type="text" class="form-control mb-2 mr-sm-2" id="first_name" name="first_name"
+                           placeholder="Enter First Name">
+                    <span id="fname_error">*</span>
+                    <input type="text" class="form-control mb-2 mr-sm-2" id="last_name" name="last_name"
+                           placeholder="Enter Last name">
+                    <input type="email" class="form-control mb-2 mr-sm-2" name="email" id="email"
+                           oninput="loadDoc()" placeholder="Enter email">
+                    <span id="email_error">*</span>
+                    <input type="password" class="form-control mb-2 mr-sm-2" name="pass" id="pass"
+                           placeholder="Enter Password">
+                    <span id="pass_error">*</span>
+                    <input type="password" class="form-control mb-2 mr-sm-2" name="u_rpass" id="r_pwd"
+                           placeholder="Enter Password Again">
+                    <span id="rpass_error">*</span>
+                </div>
+                <div class="form-group form-control col-sm-4">
+                    <label  class="mr-sm-2">
+                        First Name
+                    </label>
+                    <label  class="mr-sm-2" >
+                        Last Name
+                    </label>
+                    <label  class="mr-sm-2" >
+                        Email
+                    </label>
+                    <label " class="mr-sm-2" >
+                    Password
+                    </label>
+                    <label  class="mr-sm-2">
+                        Re-enter Password
+                    </label>
+
+                </div>
+
+                <!--<span class="form-inline">-->
+                            <!---->
+                        <!--</span>-->
+                <!--<span class="form-inline">-->
+                            <!---->
+                        <!--</span>-->
+                <!--<span class="form-inline">-->
+                            <!---->
+                        <!--</span>-->
+                <!--<span class="form-inline">-->
+                            <!---->
+                        <!--</span>-->
+                <!--<span class="form-inline">-->
+                            <!---->
+                        <!--</span>-->
+                <div class="form-group form control col-sm-1">
+                <button type="submit" class="btn btn-primary mb-2" name="signupSubmit" value="Submit">
+                    Signup
+                </button></div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="../includes/blog.js"></script>
+<script type="text/javascript">
+    function loadDoc() {
+        let email = document.getElementById("email").value;
+        let url = "http://localhost/Ajax_Assignment/product/CheckEmail.php?email="+email;
+        let xhttp = new XMLHttpRequest();
+        xhttp.open("GET", url , true);
+        xhttp.send();
+        xhttp.onload = function() {
+            let data = JSON.parse(this.responseText);
+            console.log(data);
+            if("" === email){
+                document.getElementById("email_error").innerHTML = "";
+            } else {
+                if (data['email']) {
+                    document.getElementById("email_error").innerHTML = data["message"];
+                } else {
+                    document.getElementById("email_error").innerHTML = data["message"];
+                }
+            }
+        };
+    }
+</script>
+</body>
+</html>

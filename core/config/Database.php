@@ -48,12 +48,15 @@ class Database
                 $this->username,
                 $this->password);
 
-            //setting attributes
+            // TODO: Remove for production
             $this->conn->setAttribute(
                 PDO::ATTR_ERRMODE,
                 PDO::ERRMODE_EXCEPTION);
+//            $this->conn->setAttribute('SET NAMES', 'utf8');
+//            $this->conn->query('SET NAMES utf8');
+//            $this->conn->query('SET CHARACTER_SET utf8_unicode_ci');
 
-        } catch (\PDOException $pdoe) {
+        } catch (PDOException $pdoe) {
 
             // Check connection
             //catching Exception
@@ -63,22 +66,24 @@ class Database
         return $this->conn;
     }
 
-    public function querySQL($sql = '', $params = [])
+    public function querySQL($query = '', $params = [])
     {
-        //binding sql query
-        $stmt = $this->conn->prepare($sql);
+        try {
+            //binding sql query
+            $stmt = $this->conn->prepare($query);
 
+            //executing the sql query
+            $stmt->execute($params);
 
-        //executing the sql query
-        $stmt->execute($params);
+            // output data of each row
+            $rows = $stmt->fetchALL(PDO::FETCH_ASSOC);
 
-        echo "Done query<br>";
-
-        // output data of each row
-        $rows = $stmt->fetchALL(PDO::FETCH_ASSOC);
-        var_dump($rows);
-        return $rows;
-
+            return $rows;
+        } catch (\PDOException $e) {
+            $message = $e->getMessage();
+            return $message;
+//            return null;
+        }
 
     }
 

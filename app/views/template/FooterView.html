@@ -1,0 +1,20 @@
+
+<div class="container-fluid">
+    <div id="Footer" class="jumbotron row">
+        <div class="col-sm-6 left">
+            <p >
+                Last viewed on <?php echo date("h:i:s a D d,M,Y");?>
+            </p>
+        </div>
+        <div class="col-sm-6 right">
+            <p>
+                <?php
+                    if(!empty($_SESSION['name'])) {
+                        echo $_SESSION['name'];
+                        // echo $_SESSION['User_Id'];
+                    }
+                ?>
+            </p>
+        </div>
+    </div>
+</div>

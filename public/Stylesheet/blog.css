@@ -1,0 +1,32 @@
+.Header {
+    margin-top: 10px;
+    max-height: 150px;
+    background-color: #6699ff;
+}
+
+#Content {
+    margin-bottom: -30px
+}
+
+#Footer {
+    background-color: darkcyan;
+    text-align: left;
+}
+#Footer.right {
+    text-align: right;
+}
+#Footer.left{
+    text-align: right;
+}
+
+#SignUpForm {
+    margin-left: 100px;
+}
+#SignUpForm.label {
+    font-size: 1.1em;
+    padding-bottom: 8px
+}
+
+#SignUpForm {
+    padding-bottom: 10px;
+}

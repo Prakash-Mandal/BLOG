@@ -1,0 +1,66 @@
+
+    <div class="container-fluid">
+        <div class="jumbotron row" style="text-align: left;">
+            <div class="jumbotron col-sm-6">
+                <img class="img-thumbnail" src="../public/media/Images/Entrepreneur-Blogs.jpg"
+                     alt="public/media/Images/Entrepreneur-Blogs.jpg">
+            </div>
+            <div class="jumbotron col-sm-6 text-center" style="padding: 100px text-align: left">
+                <form method="POST" id="SignupForm" class="form-group text-center mb-md-3"
+                      action="/signup/setData"novalidate>
+                    <span class="form-inline ml-sm-5">
+                        <input type="text" class="form-control mb-md-3 ml-md-5 needs-validation" id="first_name" name="first_name"
+                               oninput="validateFirstName()" placeholder="Enter First Name" required>
+                        <span id="first_name_error" class="invalid-feedback ml-sm-2 "> Enter Name Correctly</span>
+                    </span>
+                    <span class="form-inline ml-sm-5">
+                        <input type="text" class="form-control mb-md-3 ml-md-5 needs-validation" id="last_name" name="last_name"
+                               oninput="validateLastName()" placeholder="Enter Last name">
+                        <span id="last_name_error" class="invalid-feedback ml-sm-2 "> Enter Name Correctly</span>
+                    </span>
+                    <span class="form-inline ml-sm-5">
+                        <input type="email" class="form-control mb-md-3 ml-md-5 needs-validation" name="email" id="email"
+                               onchange="validateEmail()" oninput="checkEmail()"
+                               autocomplete="username email" placeholder="Enter email" required>
+                        <span id="email_error" class="invalid-feedback ml-sm-2 "> Enter Email Correctly</span>
+                    </span>
+                    <span class="form-inline ml-sm-5">
+                        <input type="password" class="form-control mb-md-3 ml-md-5 needs-validation" name="pass" id="pass"
+                               oninput="validatePassword()" autocomplete="new-password" placeholder="Enter Password" required>
+                        <span id="pass_error" class="invalid-feedback ml-sm-2 "> Enter Password Correctly</span>
+                    </span>
+                    <span class="form-inline ml-sm-5">
+                        <input type="password" class="form-control mb-md-3 ml-md-5 needs-validation" name="u_rpass" id="r_pwd"
+                               oninput="validatePassword()" autocomplete="new-password" placeholder="Enter Password Again" required>
+                        <span id="rpass_error" class="invalid-feedback ml-sm-2 "> Enter Password Correctly</span>
+                    </span>
+                    <span class="form-inline ml-sm-5">
+                        <button type="submit" class="btn btn-primary ml-md-5" id="signupSubmit" name="signupSubmit" value="Submit">
+                            Signup
+                        </button>
+                    </span>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>

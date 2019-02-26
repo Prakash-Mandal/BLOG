@@ -1,0 +1,16 @@
+<?php
+
+namespace view;
+
+class Index
+{
+    public function __construct($data)
+    {
+        require_once '../View/' . $data . '.php';
+    }
+
+    public function run($data = [])
+    {
+        echo $data;
+    }
+}
