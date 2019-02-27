@@ -9,7 +9,6 @@
 namespace core;
 
 use config\Database;
-use Main;
 use models;
 
 /**
@@ -17,6 +16,7 @@ use models;
  * @package core
  */
 class Blog
+
 {
     protected $controller;
 
@@ -24,6 +24,7 @@ class Blog
      * @var null
      */
     protected $db = null;
+    protected $conn = null;
 
     /**
      * @var array
@@ -78,16 +79,11 @@ class Blog
         $this->requireFile('core/config/session.php');
 
         $this->db = new Database();
-        $this->db->startConnection();
+        $this->conn = $this->db->startConnection();
 
-    }
-    function addJS()
-    {
-        echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
-        <script src="./public/Javascript/blog.js"></script>
-        <noscript>Script not running</noscript>';
+//        if($this->conn instanceof \PDOException) {
+//            echo '<pre>' . $this->db . '</pre>';
+//        }
     }
 
     /**
@@ -114,14 +110,41 @@ class Blog
     }
 
     public function Database()
+
     {
-        $query = 'Select * from Blog_User where `Email_Id` = :value0';
-        $param = [":value0" => "Pmandal4444@gmail.com"];
+        $query = 'INSERT INTO
+              `Article`(
+                `Article_Title`,
+                `Article`,
+                `User_Id`,
+                `Created_Date`,
+                `Modified_Date`
+              )
+            VALUES(
+              :value0,
+              :value1,
+              :value2,
+              CURRENT_TIMESTAMP,
+              CURRENT_TIMESTAMP
+            )';
+        $params = [
+            ':value0' => "Article Title",
+            ':value1' => "This is a alticle which is saved from BLOG of MVC Architecture",
+            ':value2' => '4'
+        ];
 
-        $result = $this->db->querySQL($query, $param);
 
-        var_dump($result);
+        $result = $this->db->querySQL($query, $params);
 
+        echo '<pre>';
+        if (!($result instanceof \PDOException)) {
+            echo "Result  :  ";
+            var_dump($result);
+        } else {
+            echo "Error  :  " ;
+            var_dump($result->errorInfo);
+
+        }
     }
 
     /**

@@ -1,5 +1,5 @@
-.Header {
-    margin-top: 10px;
+#Header {
+    border-radius: 5px;
     max-height: 150px;
     background-color: #6699ff;
 }
@@ -29,4 +29,10 @@
 
 #SignUpForm {
     padding-bottom: 10px;
+}
+
+#Site-icon {
+    width : auto;
+    max-height: 130px;
+
 }

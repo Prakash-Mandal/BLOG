@@ -40,3 +40,6 @@
             | Created_Date  | date            | NO   |     | NULL    |                |
             | Modified_Date | date            | NO   |     | NULL    |                |
             +---------------+-----------------+------+-----+---------+----------------+
+
+
+CREATE TABLE `Assignments`.`Comment` ( `Comment_Id` INT(5) NOT NULL AUTO_INCREMENT , `Comment_Data` TEXT NOT NULL , `User_Id` INT NOT NULL , `Article_Id` INT NOT NULL , `Created_On` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ) ENGINE = InnoDB;

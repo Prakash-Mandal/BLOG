@@ -6,11 +6,9 @@
  * Time: 4:49 PM
  */
 
-namespace controller;
-
+use controller\ControllerInterface;
 use model\Model;
 use view\Index;
-use controller\ControllerInterface;
 
 require_once 'ControllerInterface.php';
 
@@ -27,7 +25,7 @@ class Controller implements ControllerInterface
     /**
      * @var string
      */
-    protected $modelMethod = '_toString';
+    protected $modelMethod = '__toString';
     /**
      * @var array
      */
@@ -50,7 +48,7 @@ class Controller implements ControllerInterface
      */
     public function __construct()
     {
-        echo "Controller Constructor<br>";
+//        echo "Controller Constructor<br>";
     }
 
     /**
@@ -59,9 +57,11 @@ class Controller implements ControllerInterface
     public function index()
     {
         // TODO: Implement index() method.
+
+        $this->model = new $this->model;
         $data = call_user_func_array([$this->model, $this->modelMethod],[$this->param]);
         array_push($this->data, $data);
-        $this->view = new $this->view();
+        $this->view = new $this->view;
         call_user_func_array([$this->view, $this->viewMethod], [$this->data]);
 
     }
@@ -103,4 +103,9 @@ class Controller implements ControllerInterface
         $this->data = $data ? $data : [];
     }
 
+    public function __toString()
+    {
+        // TODO: Implement __toString() method.
+        return $this->model->__toString();
+    }
 }

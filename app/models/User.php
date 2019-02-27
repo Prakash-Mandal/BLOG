@@ -79,6 +79,29 @@ class User extends Model
         $this->emailId = $emailId;
     }
 
+    public function setUser($userId = 1)
+    {
+        $query = 'SELECT
+              `First_Name`,
+              `Last_Name`,
+              `Email_Id`,
+              `Created_On`,
+              `Modified_On`
+            FROM
+              `Blog_User`
+            WHERE
+              `User_Id` = ' . $userId;
+
+        $result = $this->db->querySQL($query);
+
+        foreach ($result as $key => $value) {
+            $this->setUserId($userId);
+            $this->setFirstName($value["First_Name"]);
+            $this->setLastName($value["Last_Name"]);
+            $this->setEmailId($value["Email_Id"]);
+        }
+    }
+
     public function validateUser()
     {
         $this->setEmailId(\ValidationHelper::validateInput($_POST["u_email"]));
@@ -91,11 +114,21 @@ class User extends Model
 
         $this->db->startConnection();
         $result = $this->db->querySQL($sql, $params);
-        $this->db->stopConnection();
+//        $this->db->stopConnection();
 
-        if (0 !== count($result)) {
-            if($pass_hash === $result[0]["Password"]) {
-                return $result;
+//        echo '<pre>';
+//        var_dump($result);
+//        echo $result[0]["First_Name"];
+
+        if (1 === count($result)) {
+            $this->setUserId($result[0]["User_Id"]);
+            $this->setFirstName($result[0]["First_Name"]);
+            $this->setLastName($result[0]["Last_Name"]);
+            $this->setEmailId($result[0]["Email_Id"]);
+            $this->password = $result[0]["Password"];
+            if ($pass_hash === $this->password) {
+                echo $result[0]["First_Name"];
+                return $this;
             }
             return 0;
         } else {

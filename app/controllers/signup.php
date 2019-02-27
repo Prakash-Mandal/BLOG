@@ -35,8 +35,9 @@ class Signup extends Controller
     {
         $this->model('User');
         if ($this->model->addUser()) {
-            $data = "User Added Succesfully <br> Login to Continue";
-            $this->view('template/HeaderView', $data);
+            $data =["alert-info", "User Added Succesfully ...   Login to Continue"];
+            $this->view('template/HeaderView');
+            $this->view('template/Alert', $data);
             $this->view('SignUpView');
             $this->view('template/FooterView');
         } else {

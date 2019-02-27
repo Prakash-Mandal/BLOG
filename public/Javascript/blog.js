@@ -1,6 +1,6 @@
 
 
-alert("JavaScript is working");
+// alert("JavaScript is working");
 
 /**
  *
@@ -29,16 +29,13 @@ function validateLogin(form) {
     let y = document.forms["LoginForm"]["pass"].value;
     let pattern = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
     if (!pattern.test(x) && "" === x) {
-        alert("hello1");
         document.getElementById("email_error").innerText = "Enter valid User Email";
         return false;
     } else if ("" === y) {
-        alert("hello2");
         document.getElementById("password_error").innerText =  "Enter valid password";
         return false;
     } else {
-        // return true;
-        alert("hello OK");
+        return true;
         // window.location.href = "www.myblog.example";
     }
 }

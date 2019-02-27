@@ -32,6 +32,11 @@ abstract class Controller {
 
         if (class_exists('controller\\' . $this->route[1])) {
 
+            if (3 >= $this->args) {
+                $method = explode('?', $this->route[$this->args - 1]);
+                $this->route[2] = $method[0];
+            }
+
             if ($this->args >= 3) {
                 if (method_exists($this, $this->route[2])) {
                     $this->uriCaller(2, 3);
@@ -43,7 +48,6 @@ abstract class Controller {
             }
 
         } else {
-            echo "method : " . $this->route[1];
 
             if ($this->args >= 2) {
                 if (method_exists($this, $this->route[1])) {

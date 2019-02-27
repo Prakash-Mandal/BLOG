@@ -47,12 +47,11 @@ class Login extends Controller {
 
         if (1 === count($result)) { // User->validateUser() from /models/User.php
 
-            $_SESSION["name"] = $result[0]["First_Name"] . $result[0]["Last_Name"] ;
+            $_SESSION["name"] = $this->model->getFirstName() . ' ' . $this->model->getLastName() ;
+            $_SESSION['User_Id'] = $this->model->getUserId();
+            $_SESSION['email'] = $this->model->getEmailId();
 
-            $data = [$result[0]["First_Name"], $result[0]["Last_Name"]];
-            $this->view('template/HeaderView' , [$data]);
-            $this->view('Dashboard');
-            $this->view('template/FooterView');
+            header('Location: /article');
 
         } else {
 
@@ -67,61 +66,6 @@ class Login extends Controller {
 
 
 
-    }
-
-    function callingBlogs()
-    {
-
-        if ($var > 0) {
-            while ($row = mysqli_fetch_assoc($retval)) { ?>
-                <h4 class="panel-title">
-                    <a class="btn btn-success btn-group " name="article-title"
-                       data-toggle="collapse" href="#collapse<?php echo $var; ?>">
-                        <?php echo $row["Article_Title"] ?>
-                        <small class="text-dark ml-md-3">
-                            <?php echo $row["Created_Date"]; ?>
-                        </small>
-                    </a>
-                </h4>
-                <div id="collapse<?php echo $var; ?>" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <form class=form-inline method="GET" onsubmit="return promptUpdate()">
-                            <textarea class="form-control" name="article" rows="10" cols="50">
-                                <?php echo $row["Article"]; ?> </textarea>
-                            <div class="form-group mt-md-3 ml-md-2">
-                                <button class="btn btn-primary mr-md-2" name="updateBlog"
-                                        type="submit" value="<?php echo $row["Article_Title"]; ?>">
-                                    Update
-                                </button>
-                        </form>
-                        <form method="POST" onsubmit=" return promptDelete()">
-                            <button class="btn btn-danger" name="deleteBlog"
-                                    type="submit" value="<?php echo $row["Article_Title"] ?>">
-                                Delete
-                            </button>
-                        </form>
-                    </div>
-                </div>
-                </div>
-                <?php $var--;
-            }
-        } else { ?>
-            <h4 class="panel-title">
-                <a class="btn btn-success btn-block"
-                   data-toggle="collapse" href="#collapse">
-                    Start your blog
-                    <small>
-                        <?php echo date('d/m/Y'); ?>
-                    </small>
-                </a>
-            </h4>
-            <div id="collapse" class="panel-collapse collapse">
-                <div class="panel-body">
-                    Write out your life ...
-                    <br>Everyone\'s waiting....
-                </div>
-            </div>
-        <?php }
     }
 
     /*

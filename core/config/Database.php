@@ -17,7 +17,7 @@ class Database
     private $password = '';
     private $database = '';
 
-    protected $conn = null;
+    private $conn = null;
 
     public function __construct()
     {
@@ -48,22 +48,17 @@ class Database
                 $this->username,
                 $this->password);
 
-            // TODO: Remove for production
             $this->conn->setAttribute(
                 PDO::ATTR_ERRMODE,
                 PDO::ERRMODE_EXCEPTION);
-//            $this->conn->setAttribute('SET NAMES', 'utf8');
-//            $this->conn->query('SET NAMES utf8');
-//            $this->conn->query('SET CHARACTER_SET utf8_unicode_ci');
 
-        } catch (PDOException $pdoe) {
+            return $this->conn;
 
-            // Check connection
+        } catch (\PDOException $pdoe) {
+
             //catching Exception
-            echo $pdoe->getMessage();
+            return $pdoe;
         }
-
-        return $this->conn;
     }
 
     public function querySQL($query = '', $params = [])
@@ -72,17 +67,26 @@ class Database
             //binding sql query
             $stmt = $this->conn->prepare($query);
 
+//            $i = 0;
+//            foreach ($params as $x => $y) {
+//                echo $x . '=>' . $y . '<br>';
+//                $stmt->bindParam(":value" . $i, $y);
+//                $i++;
+//            }
+
             //executing the sql query
-            $stmt->execute($params);
+             if ($stmt->execute($params)) {
+                 // output data of each row
+                 $rows = $stmt->fetchALL(PDO::FETCH_ASSOC);
+                 if (0 === count($rows)) {
+                     return ['No Data'];
+                 } else return $rows;
+             } else {
+                 return $stmt->error;
+             }
 
-            // output data of each row
-            $rows = $stmt->fetchALL(PDO::FETCH_ASSOC);
-
-            return $rows;
-        } catch (\PDOException $e) {
-            $message = $e->getMessage();
-            return $message;
-//            return null;
+        } catch (\PDOException $pdoe) {
+            return $pdoe;
         }
 
     }
@@ -94,6 +98,18 @@ class Database
         $this->username = null;
         $this->password = null;
         $this->database = null;
+    }
+
+    public function __toString()
+    {
+        // TODO: Implement __toString() method.
+
+        if(null !== $this->conn)
+            return 'Connection Established';
+        else
+            return 'Connection Ended or Interrupted';
+//            return '<pre>' . $this->pdoe->__toString() . '</pre>';
+
     }
 
 }
