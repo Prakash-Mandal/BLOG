@@ -107,6 +107,8 @@ class Blog
             $this->controller = new \controller\Main($this->db);
         }
 
+        $this->db->stopConnection();
+
     }
 
     public function Database()

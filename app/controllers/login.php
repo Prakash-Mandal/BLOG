@@ -56,8 +56,10 @@ class Login extends Controller {
         } else {
 
             $data ='Error... No such Data';
-            $this->view('template/HeaderView', $data);
-//            $this->view('template/Modal', $data);
+            $this->view('template/HeaderView');
+            echo `<div class="alert alert-danger" role="alert">
+                    Alert : $data
+                </div>`;
             $this->view('SignUpView');
             $this->view('template/FooterView');
 

@@ -136,16 +136,16 @@ class Article extends Model
     }
 
     /**
-     * @return array|bool|\Exception|\PDOException|null
+     * @return array|bool|\Exception|Article|null
      */
     function addArticle()
     {
         $result = null;
 
-        $articleTitle = $_POST["article-title"];
-        $article = $_POST["article"];
+        $articleTitle = \ValidationHelper::validateInput($_POST["article-title"]);
+        $article = \ValidationHelper::validateInput($_POST["article"]);
 
-        if("" === $article || "" === $articleTitle)
+        if(empty($article) || empty($articleTitle))
             return false;
 
         $query = 'INSERT INTO
@@ -154,40 +154,34 @@ class Article extends Model
                 `Article`,
                 `User_Id`,
                 `Created_Date`,
-                `Modified_Date`
+                `Modified_Date`,
+                `Status`
               )
             VALUES(
               :value0,
               :value1,
               :value2,
-              CURRENT_TIMESTAMP,
-              CURRENT_TIMESTAMP
+              :value3,
+              :value3,
+              TRUE
             )';
         $params = [
             ':value0' => $articleTitle,
             ':value1' => $article,
-            ':value2' => $_SESSION['User_Id']
+            ':value2' => $_SESSION['User_Id'],
+            ':value3' => \Utilities::getTime()
         ];
 
         $result = $this->db->querySQL($query, $params);
-//
-        if ($result instanceof \PDOException) {
-            return $result;
-        }else {
-            $blog = new Article();
-            foreach($result as $x => $y){
-                $blog->setArticleId($result[$y]["Article_Id"]);
-                $blog->setArticleTitle($result[$y]["Article_Title"]);
-                $blog->setArticle($result[$y]["Article"]);
-                $blog->setUserId($result[$y]["User_Id"]);
-                $blog->setCreatedDate($result[$y]["Created_Date"]);
-                $blog->setModifiedDate($result[$y]["Modified_Date"]);
-            }
-            return $blog;
-        }
-        
+
+        return $result;
+
     }
 
+    /**
+     * @param int $articleId
+     * @return array|\Exception|Article|\PDOException|null
+     */
     function getOneBlog($articleId = 1)
     {
         $result = null;
@@ -199,9 +193,11 @@ class Article extends Model
                 `User_Id`,
                 `Created_Date`,
                 `Modified_Date`
-                from `Article` as a where 
-                `Article_Id` = :value0'
-        ;
+                FROM `Article` WHERE 
+                `Article_Id` = :value0
+                AND
+                `Status` = TRUE
+        ';
         $params = [':value0' => $articleId ];
 
         $result = $this->db->querySQL($query, $params);
@@ -210,15 +206,13 @@ class Article extends Model
             return $result;
         }else {
             $blog = new Article();
-            foreach($result as $x => $y){
-//                echo 'Hello';
-//                var_dump($y["Article_Id"]);
-                $blog->setArticleId($y["Article_Id"]);
-                $blog->setArticleTitle($y["Article_Title"]);
-                $blog->setArticle($y["Article"]);
-                $blog->setUserId($y["User_Id"]);
-                $blog->setCreatedDate($y["Created_Date"]);
-                $blog->setModifiedDate($y["Modified_Date"]);
+            foreach($result as $articleKey => $articleValue){
+                $blog->setArticleId($articleValue["Article_Id"]);
+                $blog->setArticleTitle($articleValue["Article_Title"]);
+                $blog->setArticle($articleValue["Article"]);
+                $blog->setUserId($articleValue["User_Id"]);
+                $blog->setCreatedDate($articleValue["Created_Date"]);
+                $blog->setModifiedDate($articleValue["Modified_Date"]);
             }
             return $blog;
         }
@@ -240,8 +234,10 @@ class Article extends Model
                 `Created_Date`,
                 `Modified_Date`
                 from `Article` where 
-                `User_Id` = :value0'
-        ;
+                `User_Id` = :value0
+                AND
+                `Status` = TRUE
+        ';
         $params = [':value0' => $userId ];
 
         $result = $this->db->querySQL($query, $params);
@@ -250,39 +246,54 @@ class Article extends Model
 
     }
 
+    /**
+     * @param $articleId
+     * @return array|\Exception|\PDOException
+     */
     function updateArticle($articleId)
     {
+        var_dump($_POST);
         $query = 'UPDATE
               `Article`
             SET
-              `Article_Title` = :value0,
               `Article` = :value1,
               `Modified_Date` = CURRENT_TIMESTAMP
             WHERE 
                 `Article_Id` = :value2'
         ;
+        $params = [
+            ":value1" => $_POST["article"],
+            ":value2" => $articleId
+        ];
 
-            $params = [
-                ":value0" => $_POST["article-title"],
-                ":value1" => $_POST["article"],
-                ":value2" => $articleId
-            ];
+        $result = $this->db->querySQL($query, $params);
 
-            $result = $this->db->querySQL($query, $params);
-
-            return $result;
+        return $result;
 
     }
 
+    /**
+     * @param $articleId
+     */
     function deleteArticle($articleId)
     {
-        $query = 'DELETE FROM 
-            `Article` WHERE 
-            `Article_Id` = :value0'
-        ;
+        $query = 'UPDATE
+              `Article`
+            SET
+                `Status` = FALSE
+            WHERE 
+                `Article_Id` = :value0
+        ';
         $params = [':value0' => $articleId ];
 
         $result = $this->db->querySQL($query, $params);
 
+    }
+
+    function __toString()
+    {
+        // TODO: Change the autogenerated stub
+        $text = 'Article_Id : ';
+        return $text;
     }
 }

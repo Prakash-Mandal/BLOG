@@ -1,8 +1,8 @@
 <div class="jumbotron">
-    <div class="alert <?php $data[0] ?>" role="alert">
-        Alert : <?php $data[1] ?>
+    <div class="alert <?= $data[0] ?>" role="alert">
+        Alert : <?= $data[1] ?>
     </div>
-    <a href="<?= $data[2] ?>" class="text-primary mr-3">
+    <a href="<?= $data[2] ?>" class="text-primary mr-3" <?= $data[3] ?> >
         Return to previous Page.
     </a>
 </div>

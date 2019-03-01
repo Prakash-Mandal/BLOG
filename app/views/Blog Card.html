@@ -1,17 +1,16 @@
-<div class="card mr-3">
+<div class="card mr-3 mt-3 ml-3">
     <div class="card">
         <div class="card-header bg-info text-center text-dark">
             <?= $data[0] ?>
         </div>
-        <div class="card-body card-text ">
+        <div id="ArticleCardBody" class="card-body card-text ">
             <?= $data[1] ?>
         </div>
         <div class="card-footer ">
-            <!--<form action="/article/updateArticle/<?= $data[2] ?>">-->
-                <a href="/article/showArticle/<?= $data[2] ?>" class="text-primary mr-3">
-                Read More
-                </a>
-            <!--</form>-->
+            <a href="/article/showArticle/<?= $data[2] ?>" class="text-primary mr-3">
+            Read More
+            </a>
         </div>
     </div>
 </div>
+

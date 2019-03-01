@@ -35,13 +35,13 @@ class Signup extends Controller
     {
         $this->model('User');
         if ($this->model->addUser()) {
-            $data =["alert-info", "User Added Succesfully ...   Login to Continue"];
+            $data =["alert-info", "User Added Succesfully ...   Login to Continue" , '/' , 'hidden'];
             $this->view('template/HeaderView');
             $this->view('template/Alert', $data);
             $this->view('SignUpView');
             $this->view('template/FooterView');
         } else {
-            $data =['Cannot Add the User'];
+            $data =["alert-info", 'Cannot Add the User' , '/' , 'hidden'];
             $this->view('template/HeaderView', $data);
             $this->view('SignUpView');
             $this->view('template/FooterView');

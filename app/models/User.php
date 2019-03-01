@@ -94,31 +94,39 @@ class User extends Model
 
         $result = $this->db->querySQL($query);
 
-        foreach ($result as $key => $value) {
+        foreach ($result as $userKey => $userValue) {
             $this->setUserId($userId);
-            $this->setFirstName($value["First_Name"]);
-            $this->setLastName($value["Last_Name"]);
-            $this->setEmailId($value["Email_Id"]);
+            $this->setFirstName($userValue["First_Name"]);
+            $this->setLastName($userValue["Last_Name"]);
+            $this->setEmailId($userValue["Email_Id"]);
         }
     }
 
     public function validateUser()
     {
-        $this->setEmailId(\ValidationHelper::validateInput($_POST["u_email"]));
-        $this->password = \ValidationHelper::validateInput($_POST["pass"]);
-        $pass_hash = hash('gost', $this->getEmailId().$this->password, false) . $this->password;
+        $emailId = \ValidationHelper::validateInput($_POST["u_email"]);
+        $password = \ValidationHelper::validateInput($_POST["pass"]);
+        $password = hash(
+                'gost',
+                $emailId.$password,
+                false) . ':' .
+            $password;
 
-        $sql = 'Select `User_Id`,`First_Name`,`Last_Name`,`Email_Id`, 
-            `Password` from Assignments.Blog_User where Email_Id = :value0';
-        $params = [":value0" => $this->getEmailId()];
+        $sql = 'Select 
+              `User_Id`,
+              `First_Name`,
+              `Last_Name`,
+              `Email_Id`, 
+              `Password` 
+            FROM Assignments.Blog_User 
+            WHERE Email_Id = :value0
+        ';
+        $params = [
+            ":value0" => $emailId
+        ];
 
         $this->db->startConnection();
         $result = $this->db->querySQL($sql, $params);
-//        $this->db->stopConnection();
-
-//        echo '<pre>';
-//        var_dump($result);
-//        echo $result[0]["First_Name"];
 
         if (1 === count($result)) {
             $this->setUserId($result[0]["User_Id"]);
@@ -126,8 +134,7 @@ class User extends Model
             $this->setLastName($result[0]["Last_Name"]);
             $this->setEmailId($result[0]["Email_Id"]);
             $this->password = $result[0]["Password"];
-            if ($pass_hash === $this->password) {
-                echo $result[0]["First_Name"];
+            if ($password === $this->password) {
                 return $this;
             }
             return 0;
@@ -143,7 +150,11 @@ class User extends Model
         $this->setEmailId(\ValidationHelper::validateInput($_POST["email"]));
         $this->password = \ValidationHelper::validateInput($_POST["pass"]);
 
-        $pass_hash = hash('gost', $this->getEmailId().$this->password, false) . $this->password;
+        $this->password = hash(
+            'gost',
+            $this->getEmailId().$this->password,
+            false) . ':' .
+            $this->password;
 
 
         $sql = 'INSERT INTO Assignments.Blog_User(`First_Name`,`Last_Name`,

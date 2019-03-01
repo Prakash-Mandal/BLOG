@@ -36,6 +36,10 @@ class Article extends Controller
         $this->model('Article');
         $blog = $this->model->getOneBlog($articleId);
 
+        $comments = null;
+//        $this->model('Comment');
+//        $comments = $this->model->getComments($articleId);
+
         $this->view('template/HeaderView');
 
         if ($blog instanceof \PDOException) {
@@ -45,11 +49,15 @@ class Article extends Controller
             $data = ["alert-info", $message[2], '/article/getArticle'];
             $this->view('template/Alert', $data);
             echo '</div>';
+        } elseif ($comments instanceof \PDOException) {
+
+            echo '<div class="jumbotron ">';
+            $message = $comments->errorInfo;
+            $data = ["alert-info", $message[2], '/article/getArticle'];
+            $this->view('template/Alert', $data);
+            echo '</div>';
 
         } else {
-            echo '<div class="jumbotron row mt-2 ml-1 mr-1">';
-//            var_dump($blog);
-            $this->view('AddBlog');
 
             $this->model('User');
             $this->model->setUser($_SESSION['User_Id']);
@@ -64,7 +72,29 @@ class Article extends Controller
                 $blog->getArticleId()
             ];
             $this->view('Blog', $data);
+            echo '<div class="ml-5 mb-3 col-8">';
+            if (null !== $comments) {
+                foreach ($comments as $x) {
+                    $this->model->setUser($x->getUserId());
+                    $content = $this->model->getFirstName() . " " . $this->model->getLastName();
+                    $data = [
+                        $x->getComment(),
+                        $content,
+                        $x->getCreatedOn()
+                    ];
+                    $this->view('Comment Card', $data);
+                }
+            }
             echo '</div>';
+            echo '<div>
+                    <a class="ml-3 mr-md-2" data-toggle="modal" data-target="#addComment" name="addComment"
+                       type="submit" >
+                        Comment
+                    </a>';
+            echo '  <a href="/article" class="text-primary ml-3">
+                            Return to previous Page.
+                        </a>
+                    </div>';
         }
 
         $this->view('template/FooterView');
@@ -73,6 +103,7 @@ class Article extends Controller
     function getArticle($userId = 1)
     {
         $userId = $_SESSION["User_Id"];
+
         $this->model('Article');
         $blogs = $this->model->getBlogs($userId);
 
@@ -81,11 +112,12 @@ class Article extends Controller
         if ($blogs instanceof \PDOException) {
 
             echo '<div class="jumbotron ">';
-            $data = ["alert-info", $blogs->getMessage()];
+            $message = $blogs->errorInfo;
+            $data = ['alert-info', $message[2], '/login'];
             $this->view('template/Alert', $data);
             echo '</div>';
 
-        } elseif ('No Data' === $blogs[0]) {
+        } elseif ('No Data' === $blogs) {
 
             echo '<div class="jumbotron row ml-5 mr-5">';
             $this->view('AddBlog');
@@ -114,34 +146,39 @@ class Article extends Controller
     function addArticle()
     {
         $this->model('Article');
-
         $result = $this->model->addArticle();
 
-        if(!($result instanceof \PDOException)) {
-            $this->Index();
-        } else {
+        if($result instanceof \PDOException) {
             $this->view('template/HeaderView');
             echo '<div class="jumbotron">';
             $data = ["alert-info", $result->getMessage(), '/article/getArticle'];
             $this->view('template/Alert', $data);
             echo '</div>';
             $this->view('template/FooterView');
+        } else {
+            $this->Index();
         }
     }
 
-    function updateArticle($aritcleId = 1)
+    function updateArticle()
     {
-
+        $articleId = $_POST["updateBlog"];
         $this->model('Article');
 
-        $result = $this->model->updateArticle();
+        $result = $this->model->updateArticle($articleId);
+        echo '<pre>';
+        var_dump($_POST);
+        var_dump($result);
+
+        die();
 
         if(!($result instanceof \PDOException)) {
-            header('Location: /article/getArticle');
+            header('Location: /article/showArticle/' . $articleId);
         } else {
             $this->view('template/HeaderView');
             echo '<div class="jumbotron">';
-            $data = ["alert-info", $result->getMessage(), '/article/getArticle'];
+            $php_errormsg = $result->errorInfo;
+            $data = ["alert-info", $php_errormsg[2], '/article/getArticle'];
             $this->view('template/Alert', $data);
             echo '</div>';
             $this->view('template/FooterView');

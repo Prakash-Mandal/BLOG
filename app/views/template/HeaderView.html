@@ -1,7 +1,7 @@
-    <div id="Header"  class=" container-fluid row ml-1 pt-3 pb-2">
-        <div class="col-3 text-center pb-1" >
-            <img id="Site-icon" class="img-fluid img-thumbnail" src="../public/media/Images/Entrepreneur-Blogs.jpg"
-                 alt="public/media/Images/Entrepreneur-Blogs.jpg">
+    <div id="Header"  class=" container-fluid row ml-1 pt-3 pb-3">
+        <div class="col-3 text-center mb-1" >
+            <img id="Site-icon" class="img-fluid img-thumbnail mb-1" src="/public/media/Images/Entrepreneur-Blogs.jpg"
+                 alt="/public/media/Images/Entrepreneur-Blogs.jpg">
         </div>
         <div class="col-sm-4 text-center" >
           <h1>My Blog Page</h1>
@@ -13,19 +13,23 @@
                     <h4> Hello <?= $_SESSION["name"] ?> </h4>
                     <button class="btn text-warning ml-md-3"
                     type="submit" name="logout" value="true" >
+                        <span class="glyphicon glyphicon-log-out"></span>
                         Logout
                     </button>
                 </form>
             <?php } else { ?>
                 <form name="LoginForm" class="form-group" action="/login/validating"
-                      method="POST" onsubmit="return validateLogin(this)" novalidate>
+                      method="POST" onsubmit="return validateLogin()" novalidate>
                     <div class="form-inline">
                         <input type="email" class="form-control mb-2
                             mr-sm-2" id="u_email" name="u_email"
                             autocomplete="username" placeholder="Enter Email" required>
                         <input type="password" class="form-control mb-2 mr-sm-2" id="login_pass"
                             name="pass" autocomplete="current-password" placeholder="Enter Password" required>
-                        <button type="submit" class="btn btn-dark text-white mb-2"> Login </button>
+                        <button type="submit" class="btn btn-info text-white mb-2">
+                            <span class="glyphicon glyphicon-log-in"></span>
+                            Login
+                        </button>
                     </div>
                 </form>
             <?php } ?>

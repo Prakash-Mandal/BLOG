@@ -1,75 +1,94 @@
-<div class="jumbotron row mr-1 ml-1">
-    <div class="col-8">
-        <div class="card-header">
-            <?= $data[0] ?>
-        </div>
-        <hr>
-        <div class="jumbotron text-dark">
-            <?= $data[1] ?>
-        </div>
-        <div>
-            <div class="card">
-                <p>
-                    Written By : <?= $data[2] ?>
-                </p>
-                <p>
-                    Created on : <?= $data[3] ?>
-                </p>
-                <p>
-                    Last modified on : <?= $data[4] ?>
-                </p>
-            </div>
-        </div>
-        <div class="jumbotron">
-            <button class="btn btn-primary mr-md-2" data-toggle="modal" data-target="#UpdateArticle" name="updateBlog"
-            type="submit" >
-                Update
-            </button>
-            <a class="btn btn-danger" href="/article/deleteArticle/<?= $data[5] ?>" name="deleteBlog">
-                Delete
-            </a>
-        </div>
-    </div>
-    <div class="col-4">
-        Comments
-    </div>
-</div>
-<div class="modal" id="UpdateArticle">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h4 class="modal-title">
-                    Updating Blog Article
-                </h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-
-            <!-- Modal body -->
-            <div class="modal-body">
-                <form class=form-inline method="GET" onsubmit="return promptUpdate()">
-                    <label for="article" class="form-control"><?= $data[0] ?></label>
-                    <textarea id="article" class="form-control" name="article" rows="10" cols="50">
-                        <?php $data[1] ?>
-                    </textarea>
-                    <a class="btn btn-primary mr-md-2" href="/article/updateArticle/<?= $data[5] ?>" name="updateBlog"
-                    type="submit" >
-                    Update
+<div id="Blog" class="jumbotron mr-1 ml-1">
+    <div class="container-fluid align-center row">
+        <div class="col-10 ml-5">
+            <div class="row card-header">
+                <h3 class="col-8 text-monospace text-capitalize">
+                    <?= $data[0] ?>
+                </h3>
+                <span class="col-4 text-left">
+                    <a class=" mr-md-2" data-toggle="modal" data-target="#UpdateArticle" name="updateBlog"
+                       type="submit" >
+                        Update
                     </a>
-                </form>
+                    <a id="deleteArticle" class="" href="/article/deleteArticle/<?= $data[5] ?>" name="deleteBlog">
+                        Delete
+                    </a>
+                </span>
+                <div id="article" class="border text-left" >
+                    <p class="text-info alert-dark ">Content : </p>
+                    <?= $data[1] ?>
+                </div>
             </div>
+            <div>
+                <div class="row mt-2">
+                    <p id="aboutBlog" class="text-small col-8">
+                        <span class="form-inline">Written By : <?= $data[2] ?></span>
+                        <span>Created on : <?= $data[3] ?></span>
+                        <span>Last modified on : <?= $data[4] ?></span>
+                    </p>
+                    <div class="col-6">
 
-            <!-- Modal footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
             </div>
-
         </div>
     </div>
-</div>
-<div>
-    <a href="/article" class="text-primary mr-3">
-        Return to previous Page.
-    </a>
+    <div class="modal" id="UpdateArticle">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Updating Blog Article
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    <form class=form-inline method="POST" action="/article/updateArticle ?>" onsubmit="return promptUpdate()">
+                        <label for="update_article" class="card-header"><?= $data[0] ?></label>
+                        <textarea id="update_article" class="form-control" name="article" rows="10" cols="300">
+                            <?= $data[1] ?>
+                        </textarea>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary mr-md-2" value="<?= $data[5] ?>" name="updateBlog"
+                            type="submit" >
+                                Update
+                            </button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="addComment">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Add Comment
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    <form class=form-inline method="POST">
+                        <textarea id="comment" class="form-control" name="comment" rows="6" cols="200">
+                        </textarea>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary mr-md-2" value="<?= $data[5] ?>" name="addComment"
+                                    type="submit" >
+                                Comment
+                            </button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>

@@ -1,6 +1,6 @@
 #Header {
     border-radius: 5px;
-    max-height: 150px;
+    max-height: 20%;
     background-color: #6699ff;
 }
 
@@ -34,5 +34,23 @@
 #Site-icon {
     width : auto;
     max-height: 130px;
+
+}
+#ArticleCardBody {
+    background: url(/public/media/Images/gradientleft.jpg) no-repeat center center;
+    background-size: cover;
+    color: #fff;
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    -webkit-transition: all 2s cubic-bezier(0.42,0,0.58,1);
+    -moz-transition: all 2s cubic-bezier(0.42,0,0.58,1);
+    -o-transition: all 2s cubic-bezier(0.42,0,0.58,1);
+    transition: all 2s cubic-bezier(0.42,0,0.58,1);
+}
+
+#aboutBlog {
+    font-size: x-small;
+}
+#aboutBlog:span {
 
 }

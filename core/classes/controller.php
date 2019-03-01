@@ -24,11 +24,11 @@ abstract class Controller {
 
         $this->args = count($this->route);
 
-        $this->router();
+        $this->getController();
 
     }
 
-    private function router () {
+    private function getController() {
 
         if (class_exists('controller\\' . $this->route[1])) {
 
@@ -39,31 +39,31 @@ abstract class Controller {
 
             if ($this->args >= 3) {
                 if (method_exists($this, $this->route[2])) {
-                    $this->uriCaller(2, 3);
+                    $this->functionCaller(2, 3);
                 } else {
-                    $this->uriCaller(0, 2);
+                    $this->functionCaller(0, 2);
                 }
             } else {
-                $this->uriCaller(0, 2);
+                $this->functionCaller(0, 2);
             }
 
         } else {
 
             if ($this->args >= 2) {
                 if (method_exists($this, $this->route[1])) {
-                    $this->uriCaller(1, 2);
+                    $this->functionCaller(1, 2);
                 } else {
-                    $this->uriCaller(0, 1);
+                    $this->functionCaller(0, 1);
                 }
             } else {
-                $this->uriCaller(0, 1);
+                $this->functionCaller(0, 1);
             }
 
         }
 
     }
 
-    private function uriCaller ($method, $param) {
+    private function functionCaller ($method, $param) {
 
         for ($i = $param; $i < $this->args; $i++) {
             $this->params[$i] = $this->route[$i];
@@ -85,7 +85,6 @@ abstract class Controller {
 
         $class = explode('/', $path);
         $class = $class[count($class)-1];
-//        $path = strtolower($path);
 
         if(file_exists(ROOT . 'app/models/' . $path . '.php')) {
             $class = '\models\\' . $class;
@@ -102,8 +101,6 @@ abstract class Controller {
 
         if (is_array($data))
             extract($data);
-
-//        var_dump($data);
 
         require(ROOT . 'app/views/' . $path . '.html');
 

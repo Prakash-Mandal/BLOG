@@ -1,9 +1,6 @@
 
 
-// alert("JavaScript is working");
-
 /**
- *
  * @param Articleform
  * @returns {string}
  */
@@ -11,11 +8,11 @@ function validateArticle(Articleform) {
     let title = Articleform["article-title"];
     let desc = Articleform["article"];
     let text = "";
-    if("" === title.value) {
+    if(title.value) {
         text = "Title cannot be empty";
     }
     text += "\n";
-    if("" === desc.value) {
+    if(desc.value) {
         text += "Article cannot be empty";
     }
     return text;
@@ -24,14 +21,18 @@ function validateArticle(Articleform) {
 /**
  * @returns {*}
  */
-function validateLogin(form) {
+function validateLogin() {
+
     let x = document.forms["LoginForm"]["u_email"].value;
     let y = document.forms["LoginForm"]["pass"].value;
+
+    if(!x || !y) return false;
+
     let pattern = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-    if (!pattern.test(x) && "" === x) {
+    if (!pattern.test(x) && x) {
         document.getElementById("email_error").innerText = "Enter valid User Email";
         return false;
-    } else if ("" === y) {
+    } else if (y) {
         document.getElementById("password_error").innerText =  "Enter valid password";
         return false;
     } else {
@@ -72,7 +73,6 @@ function validateEmail() {
     let email = document.forms["SignupForm"]["email"];
     let email_error = document.getElementById("email_error");
     let pattern = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-    console.log(email.value);
     if (!pattern.test(email.value)) {
         email_error.innerHTML = 'Enter a valid e-mail';
         email_error.style.color = "red";
@@ -82,16 +82,17 @@ function validateEmail() {
         document.getElementById("signupSubmit").disabled = false;
     }
 }
+
 function validatePassword() {
     let password = document.forms["SignupForm"][""];
     let pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
     if (!pattern.test(value)) {
-        document.getElementById('email_error').innerHTML = '';
-        return "Should have at least 1 lowercase character " +
-            "\n Should have atleast 1 uppercase character " +
-            "\n Should have atleast 1 number" +
-            "\n Should have one special character " +
-            "\n Should be 8 characters long";
+        document.getElementById('email_error').innerHTML =
+            `Should have at least 1 lowercase character
+            Should have atleast 1 uppercase character 
+            Should have atleast 1 number
+            Should have one special character
+            Should be 8 characters long`;
     } else {
         document.getElementById('email_error').innerHTML = '*';
         document.getElementById("signupSubmit").disabled = false;
@@ -99,7 +100,6 @@ function validatePassword() {
 }
 
 function validateSignup() {
-    let first_name = document.forms['SignupForm']['first_name'].value;
     let x = document.forms["SignupForm"]["pass"].value;
     let y = document.forms["SignupForm"]["rpass"].value;
     let flag = 1;
@@ -127,6 +127,7 @@ function promptUpdate() {
 
 function checkEmail() {
     let email = document.getElementById("email").value;
+    console.log(email);
     let url = "http://localhost/Ajax_Assignment/product/CheckEmail.php?email="+email;
     let xhttp = new XMLHttpRequest();
     xhttp.open("GET", url , true);
@@ -143,4 +144,8 @@ function checkEmail() {
             }
         }
     };
+}
+
+function ajaxCheckEmail() {
+    
 }

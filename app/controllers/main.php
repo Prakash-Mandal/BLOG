@@ -30,8 +30,8 @@ class Main extends Controller {
     /*
      * http://localhost/anothermainpage
      */
-    function anotherMainPage () {
-        echo 'Works!';
+    function getTime () {
+        echo \Utilities::getTime();
     }
 
 }

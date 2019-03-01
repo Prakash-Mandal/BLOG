@@ -67,19 +67,12 @@ class Database
             //binding sql query
             $stmt = $this->conn->prepare($query);
 
-//            $i = 0;
-//            foreach ($params as $x => $y) {
-//                echo $x . '=>' . $y . '<br>';
-//                $stmt->bindParam(":value" . $i, $y);
-//                $i++;
-//            }
-
             //executing the sql query
              if ($stmt->execute($params)) {
                  // output data of each row
                  $rows = $stmt->fetchALL(PDO::FETCH_ASSOC);
                  if (0 === count($rows)) {
-                     return ['No Data'];
+                     return 'No Data';
                  } else return $rows;
              } else {
                  return $stmt->error;
