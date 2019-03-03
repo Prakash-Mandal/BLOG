@@ -68,15 +68,15 @@ class Database
             $stmt = $this->conn->prepare($query);
 
             //executing the sql query
-             if ($stmt->execute($params)) {
-                 // output data of each row
-                 $rows = $stmt->fetchALL(PDO::FETCH_ASSOC);
-                 if (0 === count($rows)) {
-                     return 'No Data';
-                 } else return $rows;
-             } else {
-                 return $stmt->error;
-             }
+            if ($stmt->execute($params)) {
+                // output data of each row
+                $rows = $stmt->fetchALL(PDO::FETCH_ASSOC);
+
+                return 0 === count($rows)? 'No Data' : $rows;
+
+            } else {
+                return $stmt->error;
+            }
 
         } catch (\PDOException $pdoe) {
             return $pdoe;

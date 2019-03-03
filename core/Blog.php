@@ -19,12 +19,12 @@ class Blog
 
 {
     protected $controller;
-
-    /**
-     * @var null
-     */
-    protected $db = null;
-    protected $conn = null;
+//
+//    /**
+//     * @var null
+//     */
+//    protected $db = null;
+//    protected $conn = null;
 
     /**
      * @var array
@@ -43,7 +43,7 @@ class Blog
     /**
      *
      */
-    function autoload () {
+    function includingClassesAndHelpers () {
 
         spl_autoload_register(function ($class) {
 
@@ -78,12 +78,6 @@ class Blog
     {
         $this->requireFile('core/config/session.php');
 
-        $this->db = new Database();
-        $this->conn = $this->db->startConnection();
-
-//        if($this->conn instanceof \PDOException) {
-//            echo '<pre>' . $this->db . '</pre>';
-//        }
     }
 
     /**
@@ -96,57 +90,39 @@ class Blog
         session_start();
 
         $route = explode('/', URI);
+//        /$route = $this->parseURL();
 
-        if (file_exists(ROOT . 'app/controllers/' . $route[1] . '.php')) {
-            $this->requireFile('app/controllers/' . $route[1] . '.php');
-            $this->controller = '\controller\\' . ucfirst($route[1]);
-            $this->controller = new $this->controller($this->db);
-//            echo $this->controller;
+        if (isset($_SESSION['User_Id'])) {
+            if (file_exists(ROOT . 'app/controllers/' . $route[1] . '.php')) {
+
+                $this->requireFile('app/controllers/' . $route[1] . '.php');
+                $this->controller = '\controller\\' . ucfirst($route[1]);
+                $this->controller = new $this->controller();
+            } else {
+                header('Location: /dashboard');
+            }
+
         } else {
-            $this->requireFile('app/controllers/main.php');
-            $this->controller = new \controller\Main($this->db);
-        }
+            if ("login" === $route[1]) {
+                $this->requireFile('app/controllers/login.php');
+                $this->controller = new \controller\Login();
+            } else {
 
-        $this->db->stopConnection();
+                $this->requireFile('app/controllers/main.php');
+                $this->controller = new \controller\Main();
+            }
+        }
 
     }
 
     public function Database()
-
     {
-        $query = 'INSERT INTO
-              `Article`(
-                `Article_Title`,
-                `Article`,
-                `User_Id`,
-                `Created_Date`,
-                `Modified_Date`
-              )
-            VALUES(
-              :value0,
-              :value1,
-              :value2,
-              CURRENT_TIMESTAMP,
-              CURRENT_TIMESTAMP
-            )';
-        $params = [
-            ':value0' => "Article Title",
-            ':value1' => "This is a alticle which is saved from BLOG of MVC Architecture",
-            ':value2' => '4'
-        ];
-
-
-        $result = $this->db->querySQL($query, $params);
-
         echo '<pre>';
-        if (!($result instanceof \PDOException)) {
-            echo "Result  :  ";
-            var_dump($result);
-        } else {
-            echo "Error  :  " ;
-            var_dump($result->errorInfo);
-
-        }
+        $this->requireFile('/app/models/Article.php');
+        $comment = new models\Article();
+        var_dump($comment->deleteArticle(108));
+        $result = $comment->getBlogs(1);
+        var_dump($result);
     }
 
     /**

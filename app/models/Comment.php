@@ -63,47 +63,43 @@ class Comment extends Model
                 `Comment`(
                   `Comment_Data`,
                   `User_Id`,
-                  `Article_Id`,
-                  `Created_On`
+                  `Article_Id`
                 )
                 VALUES (
                   :value0,
                   :value1,
-                  :value2,
-                  :value3
+                  :value2
                 )';
         $params = [
             ":value0" => \ValidationHelper::validateInput($_POST["comment"]),
-            ":value1" => \ValidationHelper::validateInput($_POST["userId"]),
-            ":value2" => \ValidationHelper::validateInput($_POST["articleId"]),
-            ":value3" => \Utilities::getTime()
+            ":value1" => \ValidationHelper::validateInput($_SESSION["User_Id"]),
+            ":value2" => \ValidationHelper::validateInput($_POST["articleId"])
         ];
 
         $result = $this->db->querySQL($query, $params);
-
         return $result;
 
     }
 
     function getComments($articleId, $limit)
     {
-        $query = 'SELECT
-              `Comment_Id`,
-              `Comment_Data`,
-              `User_Id`,
-              `Article_Id`,
-              `Created_On`,
-              `Status`
-            FROM
-              `Comment`
-            WHERE
-              `Article_Id` = :value0 AND 
-              `Status` = TRUE
-            LIMIT :value1
-        ';
+
+        $query = "SELECT
+                  c.`Comment_Id`,
+                  b.`First_Name`,
+                  b.`Last_Name`,
+                  c.`Comment_Data`,
+                  c.`User_Id`,
+                  c.`Created_On`
+                FROM
+                  `Comment` c JOIN `Blog_User` b ON c.`User_Id` = b.`User_Id`
+                WHERE
+                b.`User_Id` IN (Select `User_Id` FROM `Comment` where
+                    `Article_Id` = :value0 AND `Status` = TRUE)
+                LIMIT " . $limit;
+
         $params = [
             ":value0" => $articleId,
-            ":value1" => $limit
         ];
 
         $result = $this->db->querySQL($query, $params);
@@ -113,16 +109,17 @@ class Comment extends Model
             return $result;
         }else {
             if("No Data" === $result) {
-                return null;
+                return "No Data";
             } else {
                 $comments = [];
                 foreach ($result as $commentKey => $commentValue) {
-                    $comment = new Comment();
-                    $comment->commentId = $commentValue["Comment_Id"];
-                    $comment->comment = $commentValue["Comment_Data"];
-                    $comment->userId = $commentValue["User_Id"];
-                    $comment->articleId = $commentValue["Article_Id"];
-                    $comment->createdOn = $commentValue["Created_Date"];
+                    $comment = [
+                        "commentId" => $commentValue["Comment_Id"],
+                        "comment" => $commentValue["Comment_Data"],
+                        "userId" => $commentValue["User_Id"],
+                        "userName" => $commentValue["First_Name"] . ' ' . $commentValue["Last_Name"],
+                        "createdOn" => $commentValue["Created_On"]
+                    ];
                     array_push($comments, $comment);
                 }
                 return $comments;

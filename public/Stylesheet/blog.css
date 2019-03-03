@@ -1,6 +1,6 @@
 #Header {
     border-radius: 5px;
-    max-height: 20%;
+    /*max-height: 20%;*/
     background-color: #6699ff;
 }
 
@@ -51,6 +51,13 @@
 #aboutBlog {
     font-size: x-small;
 }
-#aboutBlog:span {
+pre{
+    white-space: pre-line;
+}
+#ArticleContent {
+    white-space: pre-line;
+}
 
+.comment-footer {
+    margin-bottom: -20px;
 }

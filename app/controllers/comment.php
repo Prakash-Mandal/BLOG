@@ -14,34 +14,35 @@ class Comment extends Controller
     public function Index()
     {
         // TODO: Implement Index() method.
+        $url = "";
 
         if (isset($_SESSION['User_Id'])) {
 
-            header("Location: /article/getArticle");
+            $url = "Location: /article/showArticle/" . $_POST["articleId"] ;
 
         } else {
 
-            header('Location: /login');
-
+            $url = 'Location: /login';
         }
+        header($url);
+    }
+
+    function showComment($articleId)
+    {
+        $this->model('Comment');
+        $limit = 2;
+        $this->model->getComments($articleId,$limit);
+
     }
 
     function addComment()
     {
+        echo '<pre>';
         $this->model('Comment');
-        $result = $this->model->addComment();
+        $this->model->addComment();
 
-        if ($result instanceof \PDOException) {
-           $message = $result->errorInfo;
-           $data = [
-               "alert-info",
-               $message[2],
-               "", "hidden"
-           ];
-           $this->view('Alert', $data);
-        } else {
-            $this->Index();
-        }
+        $this->Index();
+
     }
 
     function deleteComment()

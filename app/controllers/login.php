@@ -20,24 +20,16 @@ class Login extends Controller {
             $this->view('template/HeaderView');
             $this->view('SignUpView');
             $this->view('template/FooterView');
-
         } else {
 
-            header('Location: /?');
-
+            header('Location: /dashboard');
         }
-
-    }
-
-    public function emptyData()
-    {
-
     }
 
     /*
      * http://localhost/login/validating
      */
-    function validating () {
+    protected function validating () {
 
         // Loads /models/User.php
         $this->model('User');
@@ -45,40 +37,26 @@ class Login extends Controller {
         $result = $this->model->validateUser();
 
 
-        if (1 === count($result)) { // User->validateUser() from /models/User.php
+        if ($result) { // User->validateUser() from /models/User.php
 
-            $_SESSION["name"] = $this->model->getFirstName() . ' ' . $this->model->getLastName() ;
-            $_SESSION['User_Id'] = $this->model->getUserId();
-            $_SESSION['email'] = $this->model->getEmailId();
-
-            header('Location: /article');
-
+            header('Location: /dashboard');
         } else {
 
-            $data ='Error... No such Data';
+            $data =['alert-danger', 'Error... No such Data ' . $result, '', 'hidden'];
             $this->view('template/HeaderView');
-            echo `<div class="alert alert-danger" role="alert">
-                    Alert : $data
-                </div>`;
+            $this->view('template/Alert', $data);
             $this->view('SignUpView');
             $this->view('template/FooterView');
-
-
         }
-
-
-
     }
 
     /*
      * http://localhost/login/logout
      */
-    function logout () {
+    protected function logout () {
 
         $_SESSION = [];
         session_unset();
         header('Location: /');
-
     }
-
 }

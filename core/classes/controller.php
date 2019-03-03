@@ -14,11 +14,7 @@ abstract class Controller {
 
     protected $view;
 
-    protected $db;
-
-    function __construct ($db) {
-
-        $this->db = $db;
+    function __construct () {
 
         $this->route = explode('/', URI);
 
@@ -28,7 +24,7 @@ abstract class Controller {
 
     }
 
-    private function getController() {
+    protected function getController() {
 
         if (class_exists('controller\\' . $this->route[1])) {
 
@@ -63,24 +59,23 @@ abstract class Controller {
 
     }
 
-    private function functionCaller ($method, $param) {
+    protected function functionCaller ($method, $parameterCount) {
 
-        for ($i = $param; $i < $this->args; $i++) {
+        for ($i = $parameterCount; $i < $this->args; $i++) {
             $this->params[$i] = $this->route[$i];
         }
 
-        if ($method == 0)
+        if ($method == 0) {
             call_user_func_array(array($this, 'Index'), $this->params);
-        else {
-            call_user_func_array(array($this, $this->route[$method]), $this->params);
-
         }
+        else
+            call_user_func_array(array($this, $this->route[$method]), $this->params);
 
     }
 
     abstract function Index ();
 
-    function model ($path) {
+    protected function model ($path) {
 
 
         $class = explode('/', $path);
@@ -97,13 +92,19 @@ abstract class Controller {
 
     }
 
-    function view ($path, $data = []) {
+    protected function view ($path, $data = []) {
 
         if (is_array($data))
             extract($data);
 
         require(ROOT . 'app/views/' . $path . '.html');
 
+    }
+
+    protected function __toString()
+    {
+        // TODO: Implement __toString() method.
+        return "Controller is " . get_called_class();
     }
 
 }

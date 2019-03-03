@@ -5,26 +5,35 @@
                 <h3 class="col-8 text-monospace text-capitalize">
                     <?= $data[0] ?>
                 </h3>
-                <span class="col-4 text-left">
-                    <a class=" mr-md-2" data-toggle="modal" data-target="#UpdateArticle" name="updateBlog"
-                       type="submit" >
+                <span class="form-inline col-4 align-right text-left">
+                    <button class="btn btn-outline-info mr-md-2" data-toggle="collapse" data-target="#UpdateArticle" name="updateBlog"
+                            type="submit" >
                         Update
-                    </a>
-                    <a id="deleteArticle" class="" href="/article/deleteArticle/<?= $data[5] ?>" name="deleteBlog">
-                        Delete
-                    </a>
+                    </button>
+
+                    <form class="form-inline" method="POST" action="/article/deleteArticle" onsubmit="return promptDelete()">
+                        <button id="deleteArticle" class="btn btn-outline-danger" name="deleteArticle" value="<?= $data[5] ?>">
+                            Delete
+                        </button>
+                    </form>
                 </span>
-                <div id="article" class="border text-left" >
-                    <p class="text-info alert-dark ">Content : </p>
-                    <?= $data[1] ?>
+                <div id="article" class="border align-right mt-3" >
+                    <p class=" text-info alert-dark ">
+                        <!--<label for="ArticleContent" >-->
+                            Content :
+                        <!--</label>-->
+                    </p>
+                    <pre id="ArticleContent" >
+                        <?= $data[1] ?>
+                    </pre>
                 </div>
             </div>
             <div>
                 <div class="row mt-2">
-                    <p id="aboutBlog" class="text-small col-8">
+                    <p id="aboutBlog" class="text-small text-justify col-8">
                         <span class="form-inline">Written By : <?= $data[2] ?></span>
-                        <span>Created on : <?= $data[3] ?></span>
-                        <span>Last modified on : <?= $data[4] ?></span>
+                        <span class="form-inline">Created on : <?= $data[3] ?></span>
+                        <span class="form-inline">Last modified on : <?= $data[4] ?></span>
                     </p>
                     <div class="col-6">
 
@@ -33,34 +42,32 @@
             </div>
         </div>
     </div>
-    <div class="modal" id="UpdateArticle">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
+    <div class="collapse" id="UpdateArticle">
+        <div class="modal-content">
 
-                <div class="modal-header">
-                    <h4 class="modal-title">
-                        Updating Blog Article
-                    </h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-
-                <div class="modal-body">
-                    <form class=form-inline method="POST" action="/article/updateArticle ?>" onsubmit="return promptUpdate()">
-                        <label for="update_article" class="card-header"><?= $data[0] ?></label>
-                        <textarea id="update_article" class="form-control" name="article" rows="10" cols="300">
-                            <?= $data[1] ?>
-                        </textarea>
-                        <div class="modal-footer">
-                            <button class="btn btn-primary mr-md-2" value="<?= $data[5] ?>" name="updateBlog"
-                            type="submit" >
-                                Update
-                            </button>
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        </div>
-                    </form>
-                </div>
-
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    Updating Blog Article
+                </h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
+
+            <div class="modal-body">
+                <form class=form-inline method="POST" action="/article/updateArticle" onsubmit="return promptUpdate()">
+                    <!--<input id="updateBlog" value="<?= $data[5] ?>" hidden>-->
+                    <label for="update_article" class="card-header"><?= $data[0] ?></label>
+                    <textarea id="update_article" class="form-control" name="article" rows="10" cols="300">
+                        <?= $data[1] ?>
+                    </textarea>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary mr-md-2" value="<?= $data[5] ?>" name="updateBlog"
+                        type="submit" >
+                            Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+
         </div>
     </div>
     <div class="modal" id="addComment">
@@ -75,12 +82,12 @@
                 </div>
 
                 <div class="modal-body">
-                    <form class=form-inline method="POST">
-                        <textarea id="comment" class="form-control" name="comment" rows="6" cols="200">
+                    <form id="AddCommentForm" class=form-inline method="POST" action="/comment/addComment">
+                        <input id="articleId" name="articleId" value="<?= $data[5] ?>"  hidden>
+                        <textarea id="comment" name="comment" class="form-control" name="comment" rows="6" cols="200">
                         </textarea>
                         <div class="modal-footer">
-                            <button class="btn btn-primary mr-md-2" value="<?= $data[5] ?>" name="addComment"
-                                    type="submit" >
+                            <button id="AddCommentButton" class="btn btn-primary mr-md-2" name="ArticleId" value="<?= $data[5] ?>" type="submit" >
                                 Comment
                             </button>
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -91,4 +98,3 @@
             </div>
         </div>
     </div>
-</div>

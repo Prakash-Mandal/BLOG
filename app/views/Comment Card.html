@@ -3,15 +3,19 @@
         <div class="card ">
             <div class="card">
                 <div class="card-body card-text ">
-                    <?= $data[0] ?>
+                    <pre id="ArticleContent" >
+                        <?= $data[0] ?>
+                    </pre>
                 </div>
-                <div class="card-footer ">
-                    <div class=" text-small text-left">
-                        <p>
-                            Created by : <?= $data[1] ?> <br>
+                <div class="comment-footer card-footer ">
+                    <p id="aboutBlog" class="text-small text-justify col-8">
+                        <span class=form-inline>
+                            Created by : <?= $data[1] ?>
+                        </span>
+                        <span class=form-inline>
                             Created on : <?= $data[2] ?>
-                        </p>
-                    </div>
+                        </span>
+                    </p>
                 </div>
             </div>
         </div>

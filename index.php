@@ -11,6 +11,7 @@
     </head>
     <body>
         <div class="container-fluid">
+<!--            <h1>Hello Blog</h1>-->
             <?php
             require_once 'core/init.php';
 
@@ -18,9 +19,11 @@
 
             $blog = new Blog();
 
-            $blog->autoload();
+            $blog->includingClassesAndHelpers();
 
             $blog->config();
+
+            // $blog->Database();
 
             $blog->call();
 
@@ -34,6 +37,7 @@
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous"></script>
     <script src="/public/Javascript/blog.js"></script>
+    <script src="/public/Javascript/jQuery.js"></script>
     <noscript>Script not running</noscript>
 </html>
 
