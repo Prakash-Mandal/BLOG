@@ -3,14 +3,15 @@ $(document).ready(function() {
 	let comment = $('#Comments');
     let article_Id = $('[name="ArticleId"]').val();
     let limit = 2;
-    let url = "http://localhost/ASSIGNMENTS/Ajax_Assignment/product/readComment.php";
+    let getcommentsURL = "http://localhost/ASSIGNMENTS/Ajax_Assignment/product/readComment.php";
     $('#AddComment').click(function() {
-        $.post(url, {
+        $.post(getcommentsURL, {
             article_id: article_Id,
             limit: limit
         }, function(data, status) {
             let text = comment.html();
             if(status) {
+            	text = '';
                 for(let x in data["data"]) {
                     console.log(data["data"][x].comment);
                     text = text +
@@ -29,6 +30,25 @@ $(document).ready(function() {
         });
         limit = limit + 2;
     });
+
+    $("#email").blur(function() {
+        let email = $('#email').val();
+        let checkemailURL = "http://localhost/ASSIGNMENTS/Ajax_Assignment/product/CheckEmail.php?email="+email;
+        $.get(checkemailURL, function(data,status){
+            if ("Proceed OK" !== data["message"])
+                document.getElementById("mail_error").innerHTML = data["message"];
+            else
+                document.getElementById("mail_error").innerHTML = "";
+        });
+    });
+
+    let upClick = true
+    $("upVote").click(function () {
+
+        if (upClick) {
+           .get()
+        }
+    })
 });
 
 

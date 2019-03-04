@@ -1,14 +1,7 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: mindfire
- * Date: 21/2/19
- * Time: 4:57 PM
- */
 
 namespace core;
 
-use config\Database;
 use models;
 
 /**
@@ -19,12 +12,6 @@ class Blog
 
 {
     protected $controller;
-//
-//    /**
-//     * @var null
-//     */
-//    protected $db = null;
-//    protected $conn = null;
 
     /**
      * @var array
@@ -52,7 +39,7 @@ class Blog
 
                 require_once ROOT . '/core/classes/' . $class . '.php';
 
-            } else if (file_exists(ROOT . '/core/helpers/' . $class . '.php')) {
+            } elseif (file_exists(ROOT . '/core/helpers/' . $class . '.php')) {
 
                 require_once ROOT . '/core/helpers/' . $class . '.php';
 
@@ -90,7 +77,6 @@ class Blog
         session_start();
 
         $route = explode('/', URI);
-//        /$route = $this->parseURL();
 
         if (isset($_SESSION['User_Id'])) {
             if (file_exists(ROOT . 'app/controllers/' . $route[1] . '.php')) {
@@ -103,9 +89,10 @@ class Blog
             }
 
         } else {
-            if ("login" === $route[1]) {
-                $this->requireFile('app/controllers/login.php');
-                $this->controller = new \controller\Login();
+            if ("login" === $route[1] || "signup" === $route[1] ) {
+                $this->requireFile('app/controllers/' . $route[1] . '.php');
+                $this->controller = '\controller\\' . ucfirst($route[1]);
+                $this->controller = new $this->controller();
             } else {
 
                 $this->requireFile('app/controllers/main.php');
@@ -153,3 +140,9 @@ class Blog
     }
 
 }
+/**
+ * Created by PhpStorm.
+ * User: mindfire
+ * Date: 21/2/19
+ * Time: 4:57 PM
+ */

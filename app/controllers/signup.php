@@ -28,6 +28,7 @@ class Signup extends Controller
         $this->last_name = $_POST["last_name"];
         $this->email = $_POST["email"];
         $this->pass = $_POST["pass"];
+
         $this->addData();
     }
 
@@ -35,13 +36,13 @@ class Signup extends Controller
     {
         $this->model('User');
         if ($this->model->addUser()) {
-            $data =["alert-info", "User Added Succesfully ...   Login to Continue" , '/' , 'hidden'];
+            $data =["alert-info", "User Added Succesfully ...   Login to Continue" , '/' , ''];
             $this->view('template/HeaderView');
             $this->view('template/Alert', $data);
             $this->view('SignUpView');
             $this->view('template/FooterView');
         } else {
-            $data =["alert-info", 'Cannot Add the User' , '/' , 'hidden'];
+            $data =["alert-info", 'Cannot Add the User' , '/' , ''];
             $this->view('template/HeaderView', $data);
             $this->view('SignUpView');
             $this->view('template/FooterView');

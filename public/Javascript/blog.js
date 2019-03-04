@@ -67,6 +67,9 @@ function validateLastName() {
         last_name_error.innerHTML = "";
         document.getElementById("signupSubmit").disabled = false;
     }
+    if (last_name.value){
+        document.getElementById("signupSubmit").disabled = false;        
+    }
 }
 
 function validateEmail() {
@@ -123,29 +126,4 @@ function promptDelete() {
 
 function promptUpdate() {
     return (confirm("Sure to update the Post!"));
-}
-
-function checkEmail() {
-    let email = document.getElementById("email").value;
-    console.log(email);
-    let url = "http://localhost/Ajax_Assignment/product/CheckEmail.php?email="+email;
-    let xhttp = new XMLHttpRequest();
-    xhttp.open("GET", url , true);
-    xhttp.send();
-    xhttp.onload = function() {
-        let data = JSON.parse(this.responseText);
-        if("" === email){
-            document.getElementById("email_error").innerHTML = "";
-        } else {
-            if (data['email']) {
-                document.getElementById("email_error").innerHTML = data["message"];
-            } else {
-                document.getElementById("email_error").innerHTML = data["message"];
-            }
-        }
-    };
-}
-
-function ajaxCheckEmail() {
-    
 }
