@@ -7,9 +7,7 @@ class ValidationHelper {
 
     public static function validateInput($value)
     {
-        $value = trim($value);
-        $value = stripcslashes($value);
-        $value = htmlspecialchars($value);
+        $value = htmlspecialchars(stripcslashes(trim($value)));
         return $value;
     }
 

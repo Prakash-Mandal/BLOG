@@ -104,12 +104,8 @@ class Blog
 
     public function Database()
     {
-        echo '<pre>';
-        $this->requireFile('/app/models/Article.php');
-        $comment = new models\Article();
-        var_dump($comment->deleteArticle(108));
-        $result = $comment->getBlogs(1);
-        var_dump($result);
+        $article = new models\Article();
+        $result = $article->getArticle();
     }
 
     /**

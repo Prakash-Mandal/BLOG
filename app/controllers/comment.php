@@ -9,8 +9,15 @@
 namespace controller;
 
 
+/**
+ * Class Comment
+ * @package controller
+ */
 class Comment extends Controller
 {
+    /**
+     *Index function for redirection
+     */
     public function Index()
     {
         // TODO: Implement Index() method.
@@ -27,6 +34,10 @@ class Comment extends Controller
         header($url);
     }
 
+    /**
+     * To get the comments on the Article
+     * @param $articleId
+     */
     function showComment($articleId)
     {
         $this->model('Comment');
@@ -35,9 +46,11 @@ class Comment extends Controller
 
     }
 
+    /**
+     *
+     */
     function addComment()
     {
-        echo '<pre>';
         $this->model('Comment');
         $this->model->addComment();
 
@@ -45,6 +58,9 @@ class Comment extends Controller
 
     }
 
+    /**
+     *
+     */
     function deleteComment()
     {
         $this->model('Comment');

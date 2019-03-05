@@ -10,9 +10,17 @@ namespace controller;
 
 use models\User;
 
+/**
+ * Class Article
+ * This controller class controls over CRUD operation on Articles.
+ * @package controller
+ */
 class Article extends Controller
 {
 
+    /**
+     *Index function for redirecting the controller
+     */
     public function Index()
     {
         // TODO: Implement Index() method.
@@ -21,7 +29,6 @@ class Article extends Controller
         if (isset($_SESSION['User_Id'])) {
 
             header("Location: /article/getArticle");
-            // $this->getArticle($_SESSION['User_Id']);
         } else {
 
             header('Location: /login');
@@ -30,6 +37,9 @@ class Article extends Controller
 
     }
 
+    /**
+     * @param int $articleId
+     */
     function showArticle($articleId = 1)
     {
 
@@ -59,17 +69,22 @@ class Article extends Controller
 
         } else {
 
-            $this->model('User');
-            $this->model->setUser($_SESSION['User_Id']);
+//            $this->model('User');
+//            $this->model->setUser($_SESSION['User_Id']);
 
-            $content = $this->model->getFirstName() . " " . $this->model->getLastName();
+//            $content = $this->model->getFirstName() . " " . $this->model->getLastName();
+
+            $this->model('Votes');
+            $this->model->getVotes($blog->getArticleId());
+
             $data = [
                 $blog->getArticleTitle(),
                 $blog->getArticle(),
-                $content,
+                $blog->author,
                 $blog->getCreatedDate(),
                 $blog->getModifiedDate(),
-                $blog->getArticleId()
+                $blog->getArticleId(),
+                $this->model->getVotes($blog->getArticleId())
             ];
 
             $this->view('Blog', $data);
@@ -83,7 +98,7 @@ class Article extends Controller
                         $x["userName"],
                         $x["createdOn"]
                     ];
-                    $this->view('Comment Card', $data);
+                    $this->view('Comment_Card', $data);
                 }
             }
             echo '</div>';
@@ -103,6 +118,9 @@ class Article extends Controller
         $this->view('template/FooterView');
     }
 
+    /**
+     * @param int $userId
+     */
     function getArticle($userId = 1)
     {
         $userId = $_SESSION["User_Id"];
@@ -137,7 +155,7 @@ class Article extends Controller
                     $content,
                     $y["Article_Id"]
                 ];
-                $this->view('Blog Card', $data);
+                $this->view('Blog_Card', $data);
             }
             echo '</div>';
         }
@@ -146,11 +164,59 @@ class Article extends Controller
 
     }
 
+    /**
+     *
+     */
     function moreArticle()
     {
+        $userId = $_SESSION["User_Id"];
 
+        echo "More Articles Comming..";
+
+        $this->model('Article');
+        $blogs = $this->model->getBlogsExcept($userId);
+
+        $this->view('template/HeaderView');
+
+        if ($blogs instanceof \PDOException) {
+
+            echo '<div class="jumbotron ">';
+            $message = $blogs->errorInfo;
+            $data = ['alert-info', $message[2], '/login'];
+            $this->view('template/Alert', $data);
+            echo '</div>';
+
+        } elseif (0 === count($blogs)) {
+
+            echo '<div class="jumbotron row ml-5 mr-5">';
+            $this->view('AddBlog');
+            $this->view('No Blog');
+            echo '</div>';
+
+        } else {
+            echo '<div class="jumbotron row mt-2 ml-1 mr-1">';
+            $this->view('AddBlog');
+            foreach ($blogs as $x => $y) {
+                $content = substr($y["Article"], 0, 50);
+                $data = [
+                    $y["Article_Title"],
+                    $content,
+                    $y["Article_Id"]
+                ];
+                $this->view('Blog_Card', $data);
+            }
+            echo '<a href="/article" class="link text-primary ml-3">
+                            Return to previous Page.
+                        </a>
+                </div>';
+        }
+
+        $this->view('template/FooterView');
     }
 
+    /**
+     *
+     */
     function addArticle()
     {
         $this->model('Article');
@@ -170,6 +236,9 @@ class Article extends Controller
         }
     }
 
+    /**
+     *
+     */
     function updateArticle()
     {
         $articleId = $_POST["updateBlog"];
@@ -192,6 +261,9 @@ class Article extends Controller
 
     }
 
+    /**
+     *
+     */
     function deleteArticle()
     {
 
@@ -210,6 +282,9 @@ class Article extends Controller
 
     }
 
+    /**
+     * @return string
+     */
     function __toString()
     {
         // TODO: Implement __toString() method.

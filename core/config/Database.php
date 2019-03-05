@@ -72,7 +72,7 @@ class Database
                 // output data of each row
                 $rows = $stmt->fetchALL(PDO::FETCH_ASSOC);
 
-                return 0 === count($rows)? 'No Data' : $rows;
+                return 0 === count($rows)? [] : $rows;
 
             } else {
                 return $stmt->error;

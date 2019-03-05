@@ -2,10 +2,10 @@
 $(document).ready(function() {
 	let comment = $('#Comments');
     let article_Id = $('[name="ArticleId"]').val();
-    let limit = 2;
-    let getcommentsURL = "http://localhost/ASSIGNMENTS/Ajax_Assignment/product/readComment.php";
+    let limit = 4;
+    let getCommentsURL = "http://localhost/ASSIGNMENTS/Ajax_Assignment/product/readComment.php";
     $('#AddComment').click(function() {
-        $.post(getcommentsURL, {
+        $.post(getCommentsURL, {
             article_id: article_Id,
             limit: limit
         }, function(data, status) {
@@ -13,7 +13,6 @@ $(document).ready(function() {
             if(status) {
             	text = '';
                 for(let x in data["data"]) {
-                    console.log(data["data"][x].comment);
                     text = text +
                 '<div class="card "><div class="card"><div class="card-body card-text "><pre id="ArticleContent" >' +
                     data["data"][x].comment +
@@ -33,8 +32,10 @@ $(document).ready(function() {
 
     $("#email").blur(function() {
         let email = $('#email').val();
-        let checkemailURL = "http://localhost/ASSIGNMENTS/Ajax_Assignment/product/CheckEmail.php?email="+email;
-        $.get(checkemailURL, function(data,status){
+        let checkEmailURL = "http://myblog.api/CheckEmail.php";
+        $.get(checkEmailURL, {
+            email: email
+        } function(data,status){
             if ("Proceed OK" !== data["message"])
                 document.getElementById("mail_error").innerHTML = data["message"];
             else
@@ -42,13 +43,69 @@ $(document).ready(function() {
         });
     });
 
-    let upClick = true
-    $("upVote").click(function () {
-
+    let upClick = true;
+    let checkVoteURL = "http://myblog.api/getVotes.php";
+    $("#upVote").click(function () {
         if (upClick) {
-           .get()
+            upClick = false;
+            $.get(checkVoteURL, {
+                articleId: article_Id,
+                userId: User_Id,
+                vote: 1,
+                voteType: "up"
+            },function (data,status) {
+               if(status) {
+                    console.log(data["VoteCount"]);
+                    $('#votes').html(data["VoteCount"]);
+               }
+            });
+        } else {
+            upClick = true;
+            $.get(checkVoteURL, {
+                articleId: article_Id,
+                userId: User_Id,
+                vote: 0,
+                voteType: "up"
+            }, function (data,status) {
+               if(status) {
+                    console.log(data["VoteCount"]);
+                   $('#votes').html(data["VoteCount"]);
+               }
+            });
         }
-    })
+    });
+
+    let downClick = true;
+    $("#downVote").click(function () {
+        if (downClick) {
+            downClick = false;
+            $.get(checkVoteURL, {
+                articleId: article_Id,
+                userId: User_Id,
+                vote: 2,
+                voteType: "up"
+            },function (data,status) {
+               if(status) {
+                    console.log(data["VoteCount"]);
+                   $('#votes').html(data["VoteCount"]);
+               }
+            });
+        } else {
+            downClick = true;
+            $.get(checkVoteURL, {
+                articleId: article_Id,
+                userId: User_Id,
+                vote: 0,
+                voteType: "up"
+            }, function (data,status) {
+               if(status) {
+                    console.log(data["VoteCount"]);
+                   $('#votes').val(data["VoteCount"]);
+               }
+            });
+        }
+    });
+
 });
 
 

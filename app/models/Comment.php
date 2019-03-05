@@ -94,8 +94,7 @@ class Comment extends Model
                 FROM
                   `Comment` c JOIN `Blog_User` b ON c.`User_Id` = b.`User_Id`
                 WHERE
-                b.`User_Id` IN (Select `User_Id` FROM `Comment` where
-                    `Article_Id` = :value0 AND `Status` = TRUE)
+                c.`Article_Id` = :value0 AND `Status` = TRUE
                 LIMIT " . $limit;
 
         $params = [

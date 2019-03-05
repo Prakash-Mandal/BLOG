@@ -1,6 +1,9 @@
 {
     "require-dev": {
-        "phpunit/phpunit": "^8",
+        "phpunit/phpunit": "^8"
+    },
+
+    "require": {
         "ext-PDO": "*",
         "ext-json": "*"
     }

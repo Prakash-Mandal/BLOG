@@ -80,7 +80,22 @@ class User extends Model
         $this->emailId = $emailId;
     }
 
-    public function setUser($userId = 1)
+    public function checkMail($email){
+        $query = 'SELECT
+              `Email_Id`
+            FROM
+              `Blog_User`
+            WHERE
+              `Email_Id` = :value0';
+        $params =[ "value0" => $email];
+
+        $result = $this->db->querySQL($query, $params);
+        $this->db->stopConnection();
+
+        return $result[0]["Email_Id"];
+    }
+
+    protected function setUser($userId = 1)
     {
         $query = 'SELECT
               `First_Name`,

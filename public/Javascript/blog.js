@@ -37,7 +37,6 @@ function validateLogin() {
         return false;
     } else {
         return true;
-        // window.location.href = "www.myblog.example";
     }
 }
 
